@@ -61,7 +61,3 @@ def preprocess_text(dataset):
         row['text'] = re.sub(r'\s+', ' ', row['text'])
 
     return dataset
-
-dataset = create_dataset()
-dataset = preprocess_text(dataset)
-run_stats(dataset)
