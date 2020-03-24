@@ -1,4 +1,4 @@
-from embeddings.sample_embedding import *
+from embeddings.fast_text_embedding import *
 import numpy as np
 
 import nltk

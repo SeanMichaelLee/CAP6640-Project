@@ -14,14 +14,6 @@ from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 
-#########################################################################
-# This file contains a sample embedding from:
-# https://stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/
-# NOTE: This is just a sample embedding for the dataset. This embedding only
-# accounts for a 100 words per sentence. The max number of words in a sentence
-# in the dataset is 863
-#########################################################################
-
 def create_corpus():
     # Obtain dataset
     dataset = create_dataset()
@@ -42,18 +34,16 @@ def create_corpus():
     training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.20, random_state=42)
 
     # Create a word-to-index dictionary
-    tokenizer = Tokenizer(num_words=5000)
+    tokenizer = Tokenizer(num_words=10000)
     tokenizer.fit_on_texts(training_text)
     training_text = tokenizer.texts_to_sequences(training_text)
     testing_text = tokenizer.texts_to_sequences(testing_text)
 
     # Determine the vocabulary size and perform padding on the training and testing set
     vocab_size = len(tokenizer.word_index) + 1
-    max_line_length = 100
+    max_line_length = 1000
     training_text = pad_sequences(training_text, padding='post', maxlen=max_line_length)
     testing_text = pad_sequences(testing_text, padding='post', maxlen=max_line_length)
-
-    # NOTE: This encoding only supports 100 words
     embeddings_dictionary = dict()
     glove_file = open('data/glove.6B.100d.txt', encoding="utf8")
 
@@ -72,6 +62,6 @@ def create_corpus():
         if embedding_vector is not None:
             embedding_matrix[index] = embedding_vector
 
-    embedding_layer = Embedding(vocab_size, 100, weights=[embedding_matrix], input_length=100 , trainable=False)
+    embedding_layer = Embedding(vocab_size, 100, weights=[embedding_matrix], input_length=1000 , trainable=False)
 
     return training_text, testing_text, training_labels, testing_labels, embedding_layer
