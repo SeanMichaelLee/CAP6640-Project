@@ -45,6 +45,6 @@ def create_corpus():
     training_text = pad_sequences(training_text, padding='post', maxlen=max_line_length)
     testing_text = pad_sequences(testing_text, padding='post', maxlen=max_line_length)
 
-    embedding_layer = Embedding(vocab_size, 100, input_length=1000)
+    embedding_layer = Embedding(vocab_size, 100, input_length=max_line_length)
 
     return training_text, testing_text, training_labels, testing_labels, embedding_layer

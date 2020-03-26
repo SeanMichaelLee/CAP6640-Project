@@ -62,6 +62,6 @@ def create_corpus():
         if embedding_vector is not None:
             embedding_matrix[index] = embedding_vector
 
-    embedding_layer = Embedding(vocab_size, 100, weights=[embedding_matrix], input_length=1000 , trainable=False)
+    embedding_layer = Embedding(vocab_size, 100, weights=[embedding_matrix], input_length=max_line_length , trainable=False)
 
     return training_text, testing_text, training_labels, testing_labels, embedding_layer

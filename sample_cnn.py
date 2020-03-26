@@ -1,4 +1,4 @@
-from embeddings.fast_text_embedding import *
+from embeddings.glove_embedding import *
 import numpy as np
 
 import nltk
@@ -30,7 +30,7 @@ def create_cnn(embedding_layer):
     return model
 
 def train_cnn(model, training_text, training_labels):
-    history = model.fit(training_text, training_labels, batch_size=128, epochs=20, verbose=1, validation_split=0.2)
+    history = model.fit(training_text, training_labels, batch_size=128, epochs=10, verbose=1, validation_split=0.2)
     return history
 
 def test_cnn(model, testing_text, testing_labels, history):
@@ -60,4 +60,9 @@ def test_cnn(model, testing_text, testing_labels, history):
 training_text, testing_text, training_labels, testing_labels, embedding_layer = create_corpus()
 model = create_cnn(embedding_layer)
 history = train_cnn(model, training_text, training_labels)
+
+# Save model
+model.save("models/cnn_model.h5")
+print("Saved model to disk")
+
 test_cnn(model, testing_text, testing_labels, history)
