@@ -36,7 +36,7 @@ def create_corpus():
     #       Neutral = 1
     #       Negative = 0
     labels = dataset['positivity']
-    labels = np.array(list(map(lambda x: 2 if x=="Positive" else (0 if x=="Negative" else 1), labels)))
+    labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, labels)))
 
     # Divide the dataset 20% test and 80% training
     training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.20, random_state=42)

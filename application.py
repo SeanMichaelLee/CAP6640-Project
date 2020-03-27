@@ -30,11 +30,6 @@ def on_click(line_edit):
 
         elif prediction == 1:
             alert = QMessageBox()
-            alert.setText("Text Sentiment is Neutral.")
-            alert.exec_()
-
-        elif prediction == 2:
-            alert = QMessageBox()
             alert.setText("Text Sentiment is Positive.")
             alert.exec_()
 

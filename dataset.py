@@ -22,10 +22,8 @@ def create_dataset():
     # Fill in missing positivity values with 0
     dataset['positivity'] = dataset['positivity'].fillna(0.0)
 
-    # Treat positivity values of 0 as neutral
+    # Treat positivity values in the range of (0.0, 4.0) as negative
     dataset['positivity'] = dataset['positivity'].replace(0.0, "Neutral")
-
-    # Treat positivity values in the range of (1.0, 4.0) as negative
     dataset['positivity'] = dataset['positivity'].replace(1.0, "Negative")
     dataset['positivity'] = dataset['positivity'].replace(2.0, "Negative")
     dataset['positivity'] = dataset['positivity'].replace(3.0, "Negative")
@@ -38,7 +36,7 @@ def create_dataset():
     dataset['positivity'] = dataset['positivity'].replace(8.0, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(9.0, "Positive")
 
-    return dataset
+    return dataset[dataset['positivity'] != "Neutral"] # filter out neutral samples
 
 def run_stats(dataset):
     ax = seaborn.countplot(x='positivity', data=dataset).set_title("Dataset")
