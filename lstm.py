@@ -33,7 +33,6 @@ def create_lstm(embedding_layer, embedding_dim, labels_index):
   model = Sequential()
   model.add(embedding_layer)
   model.add(LSTM(embedding_dim, return_sequences=True))
-  model.add(LSTM(embedding_dim, return_sequences=True))
   model.add(Dense(units=128, input_shape=(10412,), activation='relu'))
   model.add(Flatten())
   model.add(Dropout(0.5))
