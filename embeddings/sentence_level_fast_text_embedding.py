@@ -38,11 +38,11 @@ def create_corpus():
     labels = dataset['positivity']
     labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, labels)))
 
-    # Divide the dataset 20% test and 80% training
-    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.20, random_state=42)
+    # Divide the dataset 10% test and 90% training
+    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42)
 
     # Create a word-to-index dictionary
-    tokenizer = Tokenizer(num_words=10000)
+    tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     training_text = tokenizer.texts_to_sequences(training_text)
     testing_text = tokenizer.texts_to_sequences(testing_text)
