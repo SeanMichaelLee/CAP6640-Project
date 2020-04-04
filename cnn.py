@@ -56,13 +56,3 @@ def test_cnn(model, testing_text, testing_labels, history):
     plt.xlabel('epoch')
     plt.legend(['train','test'], loc = 'upper left')
     plt.show()
-
-training_text, testing_text, training_labels, testing_labels, embedding_layer = create_corpus()
-model = create_cnn(embedding_layer)
-history = train_cnn(model, training_text, training_labels)
-
-# Save model
-model.save("models/cnn_model.h5")
-print("Saved model to disk")
-
-test_cnn(model, testing_text, testing_labels, history)

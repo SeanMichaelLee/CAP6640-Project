@@ -30,7 +30,7 @@ def create_lstm(embedding_layer):
     return model
 
 def train_lstm(model, training_text, training_labels):
-    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.2)
+    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.1)
     return history
 
 def test_lstm(model, testing_text, testing_labels, history):
@@ -56,13 +56,3 @@ def test_lstm(model, testing_text, testing_labels, history):
     plt.xlabel('epoch')
     plt.legend(['train','test'], loc = 'upper left')
     plt.show()
-
-training_text, testing_text, training_labels, testing_labels, embedding_layer = create_corpus()
-model = create_lstm(embedding_layer)
-history = train_lstm(model, training_text, training_labels)
-
-# Save model
-model.save("models/lstm_model.h5")
-print("Saved model to disk")
-
-test_lstm(model, testing_text, testing_labels, history)
