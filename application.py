@@ -62,6 +62,8 @@ def preprocess_text(text):
     # Remove multiple spaces
     text[0] = re.sub(r'\s+', ' ', text[0])
 
+    text[0] = text[0].lower()
+
     return text
 
 def populate_combo_box(combo_box):

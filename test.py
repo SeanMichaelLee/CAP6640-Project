@@ -74,30 +74,33 @@ for model in models:
 _, testing_text, _, testing_labels = create_dataset()
 
 # Perform evaluations for the TextBlob pretrained sentiment analysis tool
+print("Evaluating: TextBlob")
 predictions = pretrained_models.text_blob.predict(testing_text)
 accuracy = accuracy_score(testing_labels, predictions)
 precision = precision_score(testing_labels, predictions)
 recall = recall_score(testing_labels, predictions)
 f1 = f1_score(testing_labels, predictions)
 
-data.append({'Name': "TextBlob", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+data = data.append({'Name': "TextBlob", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
 
 # Perform evaluations for the Flair pretrained sentiment anaylsis tool
+print("Evaluating: Flair")
 predictions = pretrained_models.flair.predict(testing_text)
 accuracy = accuracy_score(testing_labels, predictions)
 precision = precision_score(testing_labels, predictions)
 recall = recall_score(testing_labels, predictions)
 f1 = f1_score(testing_labels, predictions)
 
-data.append({'Name': "Flair", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+data = data.append({'Name': "Flair", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
 
 # Perform evaluations for the VADER pretrained sentiment anaylsis tool
+print("Evaluating: VADER")
 predictions = pretrained_models.vader.predict(testing_text)
 accuracy = accuracy_score(testing_labels, predictions)
 precision = precision_score(testing_labels, predictions)
 recall = recall_score(testing_labels, predictions)
 f1 = f1_score(testing_labels, predictions)
 
-data.append({'Name': "VADER", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+data = data.append({'Name': "VADER", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
 
 print(data.to_string())

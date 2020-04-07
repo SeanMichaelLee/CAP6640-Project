@@ -20,6 +20,7 @@ def create_dataset():
 
     # Combine datasets
     dataset = pandas.concat([us_econmic_newspaper_dataset, econmic_news_dataset])
+    preprocess_text(dataset)
 
     # Fill in missing positivity values with 0
     dataset['positivity'] = dataset['positivity'].fillna(0.0)
@@ -79,6 +80,3 @@ def preprocess_text(dataset):
         dataset.loc[index, 'text'] = row['text'].lower()
 
     return dataset
-
-training_text, testing_text, training_labels, testing_labels = create_dataset()
-print(training_text)
