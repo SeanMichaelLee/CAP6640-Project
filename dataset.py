@@ -2,6 +2,8 @@ import pandas
 import seaborn
 import matplotlib.pyplot as plt
 import re
+from sklearn.model_selection import train_test_split
+import numpy as np
 
 def create_dataset():
     # "U.S. economic performance based on news articles data" obtained from:
@@ -35,8 +37,23 @@ def create_dataset():
     dataset['positivity'] = dataset['positivity'].replace(7.0, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(8.0, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(9.0, "Positive")
+    dataset = dataset[dataset['positivity'] != "Neutral"] # filter out neutral samples
 
-    return dataset[dataset['positivity'] != "Neutral"] # filter out neutral samples
+    # Create the text list from the dataset
+    text_list = []
+    for index, row in dataset.iterrows():
+        text_list.append(row['text'])
+
+    # Create a list of labels from the dataset
+    # NOTE: Positive = 2
+    #       Neutral = 1
+    #       Negative = 0
+    labels = dataset['positivity']
+    labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, labels)))
+
+    # Divide the dataset 10% test and 90% training
+    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42)
+    return training_text, testing_text, training_labels, testing_labels
 
 def run_stats(dataset):
     ax = seaborn.countplot(x='positivity', data=dataset).set_title("Dataset")

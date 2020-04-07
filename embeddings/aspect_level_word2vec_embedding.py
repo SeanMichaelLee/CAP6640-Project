@@ -1,3 +1,4 @@
+import spacy
 from dataset import *
 
 import numpy as np
@@ -11,28 +12,9 @@ from keras.models import Sequential
 from keras.layers.core import Activation, Dropout, Dense
 import keras.layers
 from keras.layers.embeddings import Embedding
-from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 
-def create_corpus():
-    # Obtain dataset
-    dataset = create_dataset()
-
-    # Create the text list from the dataset
-    text_list = []
-    for index, row in dataset.iterrows():
-        text_list.append(row['text'])
-
-    # Create a list of labels from the dataset
-    # NOTE: Positive = 2
-    #       Neutral = 1
-    #       Negative = 0
-    labels = dataset['positivity']
-    labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, labels)))
-
-    # Divide the dataset 10% test and 90% training
-    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42)
-
+def aspect_level_format(training_text):
     # NOTE: Requires running python -m spacy download en_core_web_sm
     nlp = spacy.load('en_core_web_sm')
     training_text = map(lambda x:x.lower(),training_text)
@@ -42,20 +24,47 @@ def create_corpus():
                 sentiment_terms.append(' '.join([token.lemma_ for token in text if (not token.is_stop and not token.is_punct and (token.pos_ == "ADJ" or token.pos_ == "VERB"))]))
             else:
                 sentiment_terms.append('')
-    training_text = sentiment_terms
+    return sentiment_terms
+
+def create_training_corpus():
+    # Obtain dataset
+    training_text, _, training_labels, _ = create_dataset()
+    training_text = aspect_level_format(training_text)
 
     # Create a word-to-index dictionary
+    max_line_length = 1000
     tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     training_text = tokenizer.texts_to_sequences(training_text)
-    testing_text = tokenizer.texts_to_sequences(testing_text)
-
-    # Determine the vocabulary size and perform padding on the training and testing set
-    vocab_size = len(tokenizer.word_index) + 1
-    max_line_length = 1000
     training_text = pad_sequences(training_text, padding='post', maxlen=max_line_length)
+
+    return training_text, training_labels
+
+def create_testing_corpus():
+    # Obtain dataset
+    training_text, testing_text, _, testing_labels = create_dataset()
+    training_text = aspect_level_format(training_text)
+
+    # Create a word-to-index dictionary
+    max_line_length = 1000
+    tokenizer = Tokenizer(num_words=50000)
+    tokenizer.fit_on_texts(training_text)
+    testing_text = tokenizer.texts_to_sequences(testing_text)
     testing_text = pad_sequences(testing_text, padding='post', maxlen=max_line_length)
+
+    return testing_text, testing_labels
+
+def create_embedding_layer():
+    # Obtain dataset
+    training_text, _, training_labels, _ = create_dataset()
+    training_text = aspect_level_format(training_text)
+
+    # Create a word-to-index dictionary
+    tokenizer = Tokenizer(num_words=50000)
+    max_line_length = 1000
+    tokenizer.fit_on_texts(training_text)
+    vocab_size = len(tokenizer.word_index) + 1
 
     embedding_layer = Embedding(vocab_size, 100, input_length=max_line_length)
 
-    return training_text, testing_text, training_labels, testing_labels, embedding_layer
+    return embedding_layer
