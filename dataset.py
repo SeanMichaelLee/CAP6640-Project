@@ -76,3 +76,6 @@ def preprocess_text(dataset):
         row['text'] = re.sub(r'\s+', ' ', row['text'])
 
     return dataset
+
+training_text, testing_text, training_labels, testing_labels = create_dataset()
+print(training_text)

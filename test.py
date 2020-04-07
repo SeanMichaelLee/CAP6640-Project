@@ -1,3 +1,5 @@
+from dataset import *
+
 import glob
 import pandas
 import embeddings.aspect_level_fast_text_embedding
@@ -12,6 +14,9 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
 import numpy as np
+import pretrained_models.flair
+import pretrained_models.text_blob
+import pretrained_models.vader
 
 def format_text(text):
     tokenizer = Tokenizer(num_words=5000)
@@ -37,6 +42,7 @@ for model in glob.glob("models/*.h5"):
 
 data = pandas.DataFrame(columns = ['Name', 'Test Accuracy', 'Precision', 'Recall', 'F1'])
 
+# Perform evaluations for trained models
 for model in models:
     print("Evaluating: {}".format(model))
     if "aspect_level_fast_text" in model:
@@ -64,5 +70,34 @@ for model in models:
         data = evaluate(data, model, testing_text, testing_labels)
     else:
         print("Invalid model: {}".format(model))
+
+_, testing_text, _, testing_labels = create_dataset()
+
+# Perform evaluations for the TextBlob pretrained sentiment analysis tool
+predictions = pretrained_models.text_blob.predict(testing_text)
+accuracy = accuracy_score(testing_labels, predictions)
+precision = precision_score(testing_labels, predictions)
+recall = recall_score(testing_labels, predictions)
+f1 = f1_score(testing_labels, predictions)
+
+data.append({'Name': "TextBlob", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+
+# Perform evaluations for the Flair pretrained sentiment anaylsis tool
+predictions = pretrained_models.flair.predict(testing_text)
+accuracy = accuracy_score(testing_labels, predictions)
+precision = precision_score(testing_labels, predictions)
+recall = recall_score(testing_labels, predictions)
+f1 = f1_score(testing_labels, predictions)
+
+data.append({'Name': "Flair", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+
+# Perform evaluations for the VADER pretrained sentiment anaylsis tool
+predictions = pretrained_models.vader.predict(testing_text)
+accuracy = accuracy_score(testing_labels, predictions)
+precision = precision_score(testing_labels, predictions)
+recall = recall_score(testing_labels, predictions)
+f1 = f1_score(testing_labels, predictions)
+
+data.append({'Name': "VADER", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
 
 print(data.to_string())

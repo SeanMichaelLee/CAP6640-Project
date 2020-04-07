@@ -32,10 +32,8 @@ for text,label in zip(text_list,labels):
     total_count += 1
     sentence = Sentence(text)
     classifier.predict(sentence)
-    
+
     if((sentence.labels[0].value == 'POSITIVE' and label == 1) or (sentence.labels[0].value == 'NEGATIVE' and label == 0)):
         correct_count += 1
 
 print('Accuracy is: ', correct_count/total_count)
-
-
