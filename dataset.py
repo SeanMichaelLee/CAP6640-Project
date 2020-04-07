@@ -75,4 +75,7 @@ def preprocess_text(dataset):
         # Remove multiple spaces
         row['text'] = re.sub(r'\s+', ' ', row['text'])
 
+        # To Lowercase
+        dataset.loc[index, 'text'] = row['text'].lower()
+
     return dataset
