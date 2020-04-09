@@ -8,13 +8,13 @@ import numpy as np
 def create_dataset():
     # "U.S. economic performance based on news articles data" obtained from:
     # https://www.figure-eight.com/data-for-everyone/
-    us_econmic_newspaper_dataset = pandas.read_csv("data/us-economic-newspaper.csv")
+    us_econmic_newspaper_dataset = pandas.read_csv("data/us-economic-newspaper-clean.csv")
     us_econmic_newspaper_dataset.isnull().values.any()
     us_econmic_newspaper_dataset.shape
 
     # "Economic News Article Tone and Relevance" obtained from:
     # https://www.figure-eight.com/data-for-everyone/
-    econmic_news_dataset = pandas.read_csv("data/Full-Economic-News-DFE-839861.csv")
+    econmic_news_dataset = pandas.read_csv("data/Full-Economic-News-clean.csv")
     econmic_news_dataset.isnull().values.any()
     econmic_news_dataset.shape
 
@@ -23,22 +23,24 @@ def create_dataset():
     preprocess_text(dataset)
 
     # Fill in missing positivity values with 0
-    dataset['positivity'] = dataset['positivity'].fillna(0.0)
+    dataset['positivity'] = dataset['positivity'].fillna(0)
 
     # Treat positivity values in the range of (0.0, 4.0) as negative
-    dataset['positivity'] = dataset['positivity'].replace(0.0, "Neutral")
-    dataset['positivity'] = dataset['positivity'].replace(1.0, "Negative")
-    dataset['positivity'] = dataset['positivity'].replace(2.0, "Negative")
-    dataset['positivity'] = dataset['positivity'].replace(3.0, "Negative")
-    dataset['positivity'] = dataset['positivity'].replace(4.0, "Negative")
+    dataset['positivity'] = dataset['positivity'].replace(0, "Neutral")
+    dataset['positivity'] = dataset['positivity'].replace(1, "Negative")
+    dataset['positivity'] = dataset['positivity'].replace(2, "Negative")
+    dataset['positivity'] = dataset['positivity'].replace(3, "Negative")
+    dataset['positivity'] = dataset['positivity'].replace(4, "Negative")
 
     # Treat positivity values in the range of (5.0, 9.0) as positive
-    dataset['positivity'] = dataset['positivity'].replace(5.0, "Positive")
-    dataset['positivity'] = dataset['positivity'].replace(6.0, "Positive")
-    dataset['positivity'] = dataset['positivity'].replace(7.0, "Positive")
-    dataset['positivity'] = dataset['positivity'].replace(8.0, "Positive")
-    dataset['positivity'] = dataset['positivity'].replace(9.0, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(5, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(6, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(7, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(8, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(9, "Positive")
     dataset = dataset[dataset['positivity'] != "Neutral"] # filter out neutral samples
+
+    dataset = preprocess_text(dataset)
 
     # Create the text list from the dataset
     text_list = []
