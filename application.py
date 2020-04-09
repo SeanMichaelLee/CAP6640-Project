@@ -9,6 +9,9 @@ import os
 import glob
 from dataset import *
 import spacy
+import pretrained_models.flair
+import pretrained_models.text_blob
+import pretrained_models.vader
 
 # Signal for submission button selection
 def on_click(line_edit, combo_box, training_text):
@@ -59,12 +62,20 @@ def preprocess_text(text):
     # Remove multiple spaces
     text[0] = re.sub(r'\s+', ' ', text[0])
 
+    text[0] = text[0].lower()
+
     return text
 
 def populate_combo_box(combo_box):
     models = []
     for model in glob.glob("models/*.h5"):
         models.append(model)
+
+    # Add pretrained models
+    models.append("Flair")
+    models.append("TextBlob")
+    models.append("VADER")
+
     combo_box.addItems(models)
 
 def aspect_level_format(training_text):
@@ -81,17 +92,26 @@ def aspect_level_format(training_text):
 
 def get_prediction(combo_box, text, training_text):
     model = combo_box.currentText()
-    tokenizer = Tokenizer(num_words=5000)
-    if "aspect_level" in model:
-        training_text = aspect_level_format(training_text)
 
-    tokenizer = Tokenizer(num_words=5000)
-    tokenizer.fit_on_texts(training_text)
-    text = tokenizer.texts_to_sequences(text)
-    text = pad_sequences(text, padding='post', maxlen=1000)
+    if "Flair" in model:
+        predictions= pretrained_models.flair.predict(text)[0]
+    elif "TextBlob" in model:
+        prediction = pretrained_models.flair.predict(text)[0]
+    elif "VADER" in model:
+        prediction = pretrained_models.flair.predict(text)[0]
+    else:
+        tokenizer = Tokenizer(num_words=5000)
+        if "aspect_level" in model:
+            training_text = aspect_level_format(training_text)
 
-    loaded_model = load_model(model)
-    prediction = loaded_model.predict_classes(text, batch_size=1)[0][0]
+        tokenizer = Tokenizer(num_words=5000)
+        tokenizer.fit_on_texts(training_text)
+        text = tokenizer.texts_to_sequences(text)
+        text = pad_sequences(text, padding='post', maxlen=1000)
+
+        loaded_model = load_model(model)
+        prediction = loaded_model.predict_classes(text, batch_size=1)[0][0]
+
     return prediction
 
 # Initialize application
