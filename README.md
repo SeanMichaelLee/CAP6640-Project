@@ -123,10 +123,10 @@ python application.py
 This will start the application, which the user can interact with.
 
 ## References
-[1] Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. GloVe: Global Vectors for Word Representation.
-[2] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information
-[3] "Data for everyone." [Online]. Available: https://www.figure-eight.com/data-for-everyone/
-[4] Malik, Usman. “Python for NLP: Movie Sentiment Analysis Using Deep Learning in Keras.” Stack Abuse, Stack Abuse, stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/.
-[5] Vader:  A  parsimonious  rule-based  model  for  sentiment  analysis  ofsocial  media  text.”  [Online].  Available:  http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf
-[6] “Tutorial:Quickstart.”[Online].Available:https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
-[7] A.  Akbik,  D.  Blythe,  and  R.  Vollgraf,  “Contextual  string  embeddingsfor sequence labeling,” inCOLING 2018, 27th International Conferenceon Computational Linguistics, 2018, pp. 1638–1649.
+* [1] Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. GloVe: Global Vectors for Word Representation.
+* [2] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information
+* [3] "Data for everyone." [Online]. Available: https://www.figure-eight.com/data-for-everyone/
+* [4] Malik, Usman. “Python for NLP: Movie Sentiment Analysis Using Deep Learning in Keras.” Stack Abuse, Stack Abuse, stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/.
+* [5] Vader:  A  parsimonious  rule-based  model  for  sentiment  analysis  ofsocial  media  text.”  [Online].  Available:  http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf
+* [6] “Tutorial:Quickstart.”[Online].Available:https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
+* [7] A.  Akbik,  D.  Blythe,  and  R.  Vollgraf,  “Contextual  string  embeddingsfor sequence labeling,” inCOLING 2018, 27th International Conferenceon Computational Linguistics, 2018, pp. 1638–1649.
