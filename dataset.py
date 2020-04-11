@@ -8,13 +8,13 @@ import numpy as np
 def create_dataset():
     # "U.S. economic performance based on news articles data" obtained from:
     # https://www.figure-eight.com/data-for-everyone/
-    us_econmic_newspaper_dataset = pandas.read_csv("data/us-economic-newspaper.csv")
+    us_econmic_newspaper_dataset = pandas.read_csv("data/us-economic-newspaper-clean.csv")
     us_econmic_newspaper_dataset.isnull().values.any()
     us_econmic_newspaper_dataset.shape
 
     # "Economic News Article Tone and Relevance" obtained from:
     # https://www.figure-eight.com/data-for-everyone/
-    econmic_news_dataset = pandas.read_csv("data/Full-Economic-News-DFE-839861.csv")
+    econmic_news_dataset = pandas.read_csv("data/Full-Economic-News-DFE-clean.csv")
     econmic_news_dataset.isnull().values.any()
     econmic_news_dataset.shape
 
