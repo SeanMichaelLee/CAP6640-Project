@@ -23,7 +23,7 @@ import pandas
 import xgboost
 
 dictionary: Dictionary = Dictionary.load('chars')
-data_folder = 'data/corpus'
+data_folder = 'data/two-label-corpus'
 column_name_map = {0: "label", 1: "text"}
 
 corpus = CSVClassificationCorpus(data_folder, column_name_map)
@@ -38,7 +38,7 @@ classifier = TextClassifier(document_embeddings, label_dictionary=label_dict)
 
 trainer = ModelTrainer(classifier, corpus)
 
-trainer.train('data/corpus/train', learning_rate=0.6, mini_batch_size=32, anneal_factor=0.5, patience=5, max_epochs=10)
+trainer.train('data/two-label-corpus/train', learning_rate=0.6, mini_batch_size=32, anneal_factor=0.5, patience=5, max_epochs=10)
 
 plotter = Plotter()
 plotter.plot_weights('weights.txt')
