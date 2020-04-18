@@ -19,13 +19,13 @@ from keras.preprocessing.text import Tokenizer
 # https://stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/
 #########################################################################
 
-def create_lstm(embedding_layer):
+def create_lstm(embedding_layer, binary_labels=True):
     # Create LSTM model
     model = Sequential()
     model.add(embedding_layer)
     model.add(LSTM(128))
-    model.add(Dense(1, activation='sigmoid'))
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])
+    model.add(Dense(1 if binary_labels else 3, activation='sigmoid' if binary_labels else 'softmax'))
+    model.compile(optimizer='adam', loss='binary_crossentropy' if binary_labels else 'categorical_crossentropy', metrics=['acc'])
 
     return model
 

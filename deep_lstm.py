@@ -27,7 +27,7 @@ import pandas as pd
 # https://stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/
 #########################################################################
 
-def create_lstm(embedding_layer, embedding_dim, labels_index):
+def create_lstm(embedding_layer, embedding_dim, labels_index, binary_labels=True):
 
   model = Sequential()
   model.add(embedding_layer)
@@ -35,8 +35,8 @@ def create_lstm(embedding_layer, embedding_dim, labels_index):
   model.add(Dense(units=128, input_shape=(10412,), activation='relu'))
   model.add(Flatten())
   model.add(Dropout(0.5))
-  model.add(Dense(units=1, input_shape=(128,), activation='sigmoid'))
-  model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
+  model.add(Dense(units=1 if binary_labels else 3, input_shape=(128,), activation='sigmoid' if binary_labels else 'softmax'))
+  model.compile(loss='binary_crossentropy' if binary_labels else 'categorical_crossentropy', optimizer='adam', metrics=['acc'])
   model.summary()
 
   return model

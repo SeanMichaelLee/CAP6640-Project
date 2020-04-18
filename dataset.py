@@ -5,7 +5,7 @@ import re
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-def create_dataset():
+def create_dataset(binary_labels=True):
     # "U.S. economic performance based on news articles data" obtained from:
     # https://www.figure-eight.com/data-for-everyone/
     us_econmic_newspaper_dataset = pandas.read_csv("data/us-economic-newspaper-clean.csv")
@@ -33,12 +33,11 @@ def create_dataset():
     dataset['positivity'] = dataset['positivity'].replace(4, "Negative")
 
     # Treat positivity values in the range of (5.0, 9.0) as positive
-    dataset['positivity'] = dataset['positivity'].replace(5, "Positive")
+    dataset['positivity'] = dataset['positivity'].replace(5, "Positive" if binary_labels else "Neutral")
     dataset['positivity'] = dataset['positivity'].replace(6, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(7, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(8, "Positive")
     dataset['positivity'] = dataset['positivity'].replace(9, "Positive")
-    dataset = dataset[dataset['positivity'] != "Neutral"] # filter out neutral samples
 
     dataset = preprocess_text(dataset)
 
@@ -51,8 +50,13 @@ def create_dataset():
     # NOTE: Positive = 2
     #       Neutral = 1
     #       Negative = 0
-    labels = dataset['positivity']
-    labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, labels)))
+
+    labels = []
+
+    if binary_labels:
+        labels = np.array(list(map(lambda x: 1 if x=="Positive" else 0, dataset['positivity'])))
+    else:
+        labels = np.array(list(map(lambda x: [1,0,0] if x=="Positive" else ([0,1,0] if x=="Neutral" else [0,0,1]), dataset['positivity'])))
 
     # Divide the dataset 10% test and 90% training
     training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42)
