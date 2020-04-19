@@ -13,6 +13,7 @@ from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
+from keras.callbacks import ModelCheckpoint
 
 #########################################################################
 # This file contains a sample lstm from:
@@ -29,8 +30,9 @@ def create_lstm(embedding_layer, binary_labels=True):
 
     return model
 
-def train_lstm(model, training_text, training_labels):
-    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.1)
+def train_lstm(model, training_text, training_labels, filepath):
+    callbacks = [ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False, mode='auto', period=1)]
+    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.111, callbacks=callbacks)
     return history
 
 def test_lstm(model, testing_text, testing_labels, history):

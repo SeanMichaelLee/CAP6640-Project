@@ -59,7 +59,7 @@ def create_dataset(binary_labels=True):
         labels = np.array(list(map(lambda x: [1,0,0] if x=="Positive" else ([0,1,0] if x=="Neutral" else [0,0,1]), dataset['positivity'])))
 
     # Divide the dataset 10% test and 90% training
-    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42)
+    training_text, testing_text, training_labels, testing_labels = train_test_split(text_list, labels, test_size=0.10, random_state=42, stratify=labels)
     return training_text, testing_text, training_labels, testing_labels
 
 def run_stats(dataset):

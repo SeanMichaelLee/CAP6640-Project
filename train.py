@@ -12,26 +12,20 @@ import numpy as np
 
 def train_cnn_model(embedding_layer, training_text, training_labels, name, binary_labels=True):
     model = cnn.create_cnn(embedding_layer, binary_labels=binary_labels)
-    history = cnn.train_cnn(model, training_text, training_labels)
+    history = cnn.train_cnn(model, training_text, training_labels, "models/{}.h5".format(name))
 
-    # Save model
-    model.save("models/{}.h5".format(name))
     print("Saved {} to disk".format(name))
 
 def train_lstm_model(embedding_layer, training_text, training_labels, name, binary_labels=True):
     model = lstm.create_lstm(embedding_layer, binary_labels=binary_labels)
-    history = lstm.train_lstm(model, training_text, training_labels)
+    history = lstm.train_lstm(model, training_text, training_labels, "models/{}.h5".format(name))
 
-    # Save model
-    model.save("models/{}.h5".format(name))
     print("Saved {} to disk".format(name))
 
 def train_deep_lstm_model(embedding_layer, training_text, training_labels, name, binary_labels=True):
     model = deep_lstm.create_lstm(embedding_layer, 1000, 2, binary_labels=binary_labels)
-    history = deep_lstm.train_lstm(model, training_text, training_labels)
+    history = deep_lstm.train_lstm(model, training_text, training_labels, "models/{}.h5".format(name))
 
-    # Save model
-    model.save("models/{}.h5".format(name))
     print("Saved {} to disk".format(name))
 
 # Train binary classification models
