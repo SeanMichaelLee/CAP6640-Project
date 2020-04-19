@@ -21,12 +21,13 @@ import os, re, csv, math, codecs
 from urllib.request import urlopen
 import gzip
 
-def create_training_corpus():
+max_line_length = 50
+
+def create_training_corpus(binary_labels=True):
     # Obtain dataset
-    training_text, _, training_labels, _ = create_dataset()
+    training_text, _, training_labels, _ = create_dataset(binary_labels=binary_labels)
 
     # Create a word-to-index dictionary
-    max_line_length = 1000
     tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     training_text = tokenizer.texts_to_sequences(training_text)
@@ -34,12 +35,11 @@ def create_training_corpus():
 
     return training_text, training_labels
 
-def create_testing_corpus():
+def create_testing_corpus(binary_labels=True):
     # Obtain dataset
-    training_text, testing_text, _, testing_labels = create_dataset()
+    training_text, testing_text, _, testing_labels = create_dataset(binary_labels=binary_labels)
 
     # Create a word-to-index dictionary
-    max_line_length = 1000
     tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     testing_text = tokenizer.texts_to_sequences(testing_text)
@@ -53,7 +53,6 @@ def create_embedding_layer():
 
     # Create a word-to-index dictionary
     tokenizer = Tokenizer(num_words=50000)
-    max_line_length = 1000
     tokenizer.fit_on_texts(training_text)
     vocab_size = len(tokenizer.word_index) + 1
     embeddings_index = {}

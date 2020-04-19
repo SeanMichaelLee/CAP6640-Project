@@ -13,24 +13,26 @@ from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
+from keras.callbacks import ModelCheckpoint
 
 #########################################################################
 # This file contains a sample lstm from:
 # https://stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/
 #########################################################################
 
-def create_lstm(embedding_layer):
+def create_lstm(embedding_layer, binary_labels=True):
     # Create LSTM model
     model = Sequential()
     model.add(embedding_layer)
     model.add(LSTM(128))
-    model.add(Dense(1, activation='sigmoid'))
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc'])
+    model.add(Dense(1 if binary_labels else 3, activation='sigmoid' if binary_labels else 'softmax'))
+    model.compile(optimizer='adam', loss='binary_crossentropy' if binary_labels else 'categorical_crossentropy', metrics=['acc'])
 
     return model
 
-def train_lstm(model, training_text, training_labels):
-    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.1)
+def train_lstm(model, training_text, training_labels, filepath):
+    callbacks = [ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False, mode='auto', period=1)]
+    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.111, callbacks=callbacks)
     return history
 
 def test_lstm(model, testing_text, testing_labels, history):

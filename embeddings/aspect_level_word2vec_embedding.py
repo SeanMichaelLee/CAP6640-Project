@@ -14,6 +14,8 @@ import keras.layers
 from keras.layers.embeddings import Embedding
 from keras.preprocessing.text import Tokenizer
 
+max_line_length = 50
+
 def aspect_level_format(training_text):
     # NOTE: Requires running python -m spacy download en_core_web_sm
     nlp = spacy.load('en_core_web_sm')
@@ -26,13 +28,12 @@ def aspect_level_format(training_text):
                 sentiment_terms.append('')
     return sentiment_terms
 
-def create_training_corpus():
+def create_training_corpus(binary_labels=True):
     # Obtain dataset
-    training_text, _, training_labels, _ = create_dataset()
+    training_text, _, training_labels, _ = create_dataset(binary_labels=binary_labels)
     training_text = aspect_level_format(training_text)
 
     # Create a word-to-index dictionary
-    max_line_length = 1000
     tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     training_text = tokenizer.texts_to_sequences(training_text)
@@ -40,13 +41,12 @@ def create_training_corpus():
 
     return training_text, training_labels
 
-def create_testing_corpus():
+def create_testing_corpus(binary_labels=True):
     # Obtain dataset
-    training_text, testing_text, _, testing_labels = create_dataset()
+    training_text, testing_text, _, testing_labels = create_dataset(binary_labels=binary_labels)
     training_text = aspect_level_format(training_text)
 
     # Create a word-to-index dictionary
-    max_line_length = 1000
     tokenizer = Tokenizer(num_words=50000)
     tokenizer.fit_on_texts(training_text)
     testing_text = tokenizer.texts_to_sequences(testing_text)
@@ -61,7 +61,6 @@ def create_embedding_layer():
 
     # Create a word-to-index dictionary
     tokenizer = Tokenizer(num_words=50000)
-    max_line_length = 1000
     tokenizer.fit_on_texts(training_text)
     vocab_size = len(tokenizer.word_index) + 1
 

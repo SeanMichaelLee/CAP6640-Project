@@ -21,13 +21,14 @@ import string
 import numpy as np
 import keras
 import pandas as pd
+from keras.callbacks import ModelCheckpoint
 
 #########################################################################
 # This file contains a sample lstm from:
 # https://stackabuse.com/python-for-nlp-movie-sentiment-analysis-using-deep-learning-in-keras/
 #########################################################################
 
-def create_lstm(embedding_layer, embedding_dim, labels_index):
+def create_lstm(embedding_layer, embedding_dim, labels_index, binary_labels=True):
 
   model = Sequential()
   model.add(embedding_layer)
@@ -35,16 +36,15 @@ def create_lstm(embedding_layer, embedding_dim, labels_index):
   model.add(Dense(units=128, input_shape=(10412,), activation='relu'))
   model.add(Flatten())
   model.add(Dropout(0.5))
-  model.add(Dense(units=1, input_shape=(128,), activation='sigmoid'))
-  model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])
+  model.add(Dense(units=1 if binary_labels else 3, input_shape=(128,), activation='sigmoid' if binary_labels else 'softmax'))
+  model.compile(loss='binary_crossentropy' if binary_labels else 'categorical_crossentropy', optimizer='adam', metrics=['acc'])
   model.summary()
 
   return model
 
-def train_lstm(model, training_text, training_labels):
-    training_text
-    training_labels
-    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.1)
+def train_lstm(model, training_text, training_labels, filepath):
+    callbacks = [ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False, mode='auto', period=1)]
+    history = model.fit(training_text, training_labels, batch_size=32, epochs=10, verbose=1, validation_split=0.111, callbacks=callbacks)
     return history
 
 def test_lstm(model, testing_text, testing_labels, history):
