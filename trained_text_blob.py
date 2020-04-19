@@ -2,21 +2,21 @@ from textblob.classifiers import NaiveBayesClassifier
 
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 
-import embeddings.aspect_level_word2vec_embedding
-
 import pandas
 
-training_text, training_labels = embeddings.aspect_level_word2vec_embedding.create_training_corpus()
+from dataset import *
+
+training_text, testing_text, training_labels, testing_labels = create_dataset()
 
 train = []
 for text, label in zip(training_text, training_labels):
-    train.append(tuple((text, label))
+    train.append(tuple((text, label)))
 
 cl = NaiveBayesClassifier(train)
 
-testing_text, testing_labels = embeddings.aspect_level_word2vec_embedding.create_testing_corpus()
-
-predictions = cl.classify(testing_text)
+predictions = []
+for text in testing_text:
+    predictions.append(cl.classify(text))
 
 data = pandas.DataFrame(columns = ['Name', 'Test Accuracy', 'Precision', 'Recall', 'F1'])
 
@@ -25,6 +25,6 @@ precision = precision_score(testing_labels, predictions)
 recall = recall_score(testing_labels, predictions)
 f1 = f1_score(testing_labels, predictions)
 
-data = data.append({'Name': "TrainedTextBlob", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
+data = data.append({'Name': "TrainedTextBlob (Three Labels)", 'Test Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1': f1}, ignore_index=True)
 
 print(data.to_string())
